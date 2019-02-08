@@ -11,6 +11,7 @@ from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 
+
 def index(request):
     category_list = Category.objects.order_by('-likes')[:5]
     most_viewed_list = Page.objects.order_by('-views')[:5]
@@ -109,7 +110,7 @@ def user_login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(uername=username, password=password)
+        user = authenticate(username=username, password=password)
 
         if user:
             if user.is_active:
@@ -117,7 +118,7 @@ def user_login(request):
                 return HttpResponseRedirect(reverse('index'))
             else:
                 print("Invalid login deatils: {0}, {1}".format(username, password))
-                return HttpResponse("Invalid login details supplies.")
+                return HttpResponse("Invalid login details supplied.")
         else:
             return render(request, 'rango/login.html', {})
     else:
@@ -125,7 +126,7 @@ def user_login(request):
 
 @login_required
 def restricted(request):
-    return HttpResponse("Since you're logged in, you can see this text!")
+    return render(request, 'rango/restricted.html', {})
 
 @login_required
 def user_logout(request):
